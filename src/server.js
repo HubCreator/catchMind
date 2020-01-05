@@ -21,11 +21,16 @@ const server = app.listen(PORT, handleListening);
 
 const io = socketIO.listen(server);
 
-let sockets = [];
-
-// io.on("connection", socket => console.log(socket));
 io.on("connection", socket => {
-  sockets.push(socket.id);
+  // socket.emit : Send messages from server to client(browser) directly
+  // socket.broadcast.emit : Send message all clients except the connected client
+  socket.on("newMessage", ({ message }) => {
+    socket.broadcast.emit("messageNotif", {
+      message,
+      nickname: socket.nickname || "Anonymous"
+    });
+  });
+  socket.on("setNickName", ({ nickname }) => {
+    socket.nickname = nickname; // User can make varibales under socket object
+  });
 });
-
-setInterval(() => console.log(sockets), 1000);
