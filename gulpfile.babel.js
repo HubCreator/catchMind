@@ -2,8 +2,8 @@ import gulp from "gulp"; // as like webpack
 import sass from "gulp-sass"; // can compile SCSS into CSS
 import autoprefixer from "gulp-autoprefixer"; // make our code compatible in various websites automatically
 import minifyCSS from "gulp-csso"; // make our CSS code minified
-import del from "del";
-import browserify from "gulp-browserify";
+import del from "del"; // delete files automatically
+import browserify from "gulp-browserify"; //
 import babelify from "babelify";
 
 sass.compiler = require("node-sass");
