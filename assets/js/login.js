@@ -8,8 +8,9 @@ const NICKNAME = "nickname";
 const nickname = localStorage.getItem(NICKNAME);
 
 const logIn = nickname => {
-  const socket = io("/");
-  socket.emit("setNickname", { nickname });
+  // eslint-disable-next-line no-undef
+  window.socket = io("/");
+  window.socket.emit(window.events.setNickname, { nickname });
 };
 
 if (nickname === null) {
