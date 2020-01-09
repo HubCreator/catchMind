@@ -1,3 +1,5 @@
+import { getSocket } from "./sockets";
+
 const messages = document.getElementById("jsMessages");
 const sendMessage = document.getElementById("jsSendMessage");
 
@@ -14,8 +16,13 @@ const handleSendMessage = event => {
   event.preventDefault();
   const input = sendMessage.querySelector("input");
   const { value } = input;
+  getSocket().emit(window.events.sendMessage, { message: value });
   input.value = "";
-  appendMessage(value, window.nickname);
+  appendMessage(value);
+};
+
+export const handleNewMessage = ({ message, nickname }) => {
+  appendMessage(message, nickname);
 };
 
 if (sendMessage) {
