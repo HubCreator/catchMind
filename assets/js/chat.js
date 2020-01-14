@@ -12,17 +12,17 @@ const appendMessage = (text, nickname) => {
   messages.appendChild(li);
 };
 
+export const handleNewMessage = ({ message, nickname }) => {
+  appendMessage(message, nickname);
+};
+
 const handleSendMessage = event => {
   event.preventDefault();
   const input = sendMessage.querySelector("input");
   const { value } = input;
   getSocket().emit(window.events.sendMessage, { message: value });
   input.value = "";
-  appendMessage(value);
-};
-
-export const handleNewMessage = ({ message, nickname }) => {
-  appendMessage(message, nickname);
+  appendMessage(value); // nickname is null
 };
 
 if (sendMessage) {

@@ -30,7 +30,7 @@ const handleFormSubmit = e => {
   input.value = "";
   localStorage.setItem(NICKNAME, value);
   body.className = LOGGED_IN;
-  logIn(value);
+  logIn(value); // back-end part
 };
 
 if (loginForm) {
