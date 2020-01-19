@@ -2,36 +2,45 @@ import { getSocket } from "./sockets";
 
 const canvas = document.getElementById("jsCanvas");
 const context = canvas.getContext("2d");
-
 const colors = document.getElementsByClassName("jsColor");
 const range = document.getElementById("jsRange");
 const mode = document.getElementById("jsMode");
 
-context.strokeStyle = "#2c2c2c";
+const INITIAL_COLOR = "#2c2c2c";
+const CANVAS_SIZE = 700;
+
+canvas.width = CANVAS_SIZE;
+canvas.height = CANVAS_SIZE;
+
+context.fillStyle = "white";
+context.fillRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
+context.strokeStyle = INITIAL_COLOR;
+context.fillStyle = INITIAL_COLOR;
 context.lineWidth = 2.5;
 
 let painting = false;
-let filling = true;
+let filling = false;
 
-function stopPainting() {
-  painting = false;
-}
+const stopPainting = () => (painting = false);
 
-function startPainting() {
-  painting = true;
-}
+const startPainting = () => (painting = true);
 
 const beginPath = (x, y) => {
-  context.beginPath();
-  context.moveTo(x, y);
+  context.beginPath(); // ready to start
+  context.moveTo(x, y); // from
 };
 
-const strokePath = (x, y) => {
-  context.lineTo(x, y);
-  context.stroke();
+const strokePath = (x, y, color = null) => {
+  let currentColor = context.strokeStyle;
+  if (color !== null) {
+    context.strokeStyle = color;
+  }
+  context.lineTo(x, y); // to
+  context.stroke(); // make a line
+  context.strokeStyle = currentColor;
 };
 
-function onMouseMove(event) {
+const onMouseMove = event => {
   const x = event.offsetX;
   const y = event.offsetY;
   if (!painting) {
@@ -39,38 +48,54 @@ function onMouseMove(event) {
     getSocket().emit(window.events.beginPath, { x, y });
   } else {
     strokePath(x, y);
-    getSocket().emit(window.events.strokePath, { x, y });
+    getSocket().emit(window.events.strokePath, {
+      x,
+      y,
+      color: context.strokeStyle
+    });
   }
-}
+};
 
-function handleColorClick(event) {
+const handleColorClick = event => {
   const color = event.target.style.backgroundColor;
-  if (filling == false) {
-    canvas.style.backgroundColor = color;
-  } else {
-    context.strokeStyle = color;
-  }
-}
+  context.strokeStyle = color;
+  context.fillStyle = color;
+};
 
-function handleRangeChange(event) {
-  context.lineWidth = event.target.value;
-}
-
-function handleModeClick() {
+const handleModeClick = () => {
   if (filling === true) {
     filling = false;
-    mode.innerText = "Paint";
+    mode.innerText = "Fill";
   } else {
     filling = true;
-    mode.innerText = "Fill";
+    mode.innerText = "Paint";
   }
-}
+};
+
+const fill = (color = null) => {
+  let currentColor = context.fillStyle;
+  if (color !== null) context.fillStyle = color;
+  context.fillRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
+  context.fillStyle = currentColor;
+};
+
+const handleRangeChange = event => {
+  context.lineWidth = event.target.value;
+};
+
+const handleCanvasClick = () => {
+  if (filling) {
+    fill();
+    getSocket().emit(window.events.fill, { color: context.fillStyle });
+  }
+};
 
 if (canvas) {
   canvas.addEventListener("mousemove", onMouseMove);
   canvas.addEventListener("mousedown", startPainting);
   canvas.addEventListener("mouseup", stopPainting);
   canvas.addEventListener("mouseleave", stopPainting);
+  canvas.addEventListener("click", handleCanvasClick);
 }
 
 Array.from(colors).forEach(color =>
@@ -89,6 +114,10 @@ export const handleBeganPath = ({ x, y }) => {
   beginPath(x, y);
 };
 
-export const handleStrokedPath = ({ x, y }) => {
-  strokePath(x, y);
+export const handleStrokedPath = ({ x, y, color }) => {
+  strokePath(x, y, color);
+};
+
+export const handleFilled = ({ color }) => {
+  fill(color);
 };
