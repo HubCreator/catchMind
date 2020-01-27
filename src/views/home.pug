@@ -27,10 +27,14 @@ html(lang="en")
                     .controls__color.jsColor(style="background-color: skyblue")
                     .controls__color.jsColor(style="background-color: navy")
                     .controls__color.jsColor(style="background-color: purple")
-        .chat#jsChat
-            ul.chat__messages#jsMessages
-            form.chat__form#jsSendMessage
-                input(placeholder="Write a Message" type="text")
+        .rigtPanel
+            .gameInfo#jsGameInfo
+                .participants#jsParticipants participants: 
+                .stopWatch 00:00
+            .chat#jsChat
+                ul.chat__messages#jsMessages
+                form.chat__form#jsSendMessage
+                    input(placeholder="Write a Message" type="text")
         script.
             window.events = !{events}   // send "events" variable to window, window.events global variable
         script(src="/socket.io/socket.io.js")

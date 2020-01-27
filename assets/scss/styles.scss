@@ -26,20 +26,32 @@ body {
   display: flex;
   flex-direction: row;
   justify-content: center;
-  align-items: center;
+  // align-items: center;
+  // align-content: center;
   min-height: 100%;
   .loginBox,
-  .gameContainer {
+  .gameContainer,
+  .rightPanel {
     display: none;
   }
+
   &.loggedOut {
     .loginBox {
       display: block;
     }
   }
+
   &.loggedIn {
-    .gameContainer {
-      display: block;
+    .gameContainer,
+    .rightPanel {
+      display: flex;
+      flex-direction: row;
+      margin: 20px;
     }
+  }
+  .rightPanel {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
 }
