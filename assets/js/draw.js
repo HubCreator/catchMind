@@ -1,8 +1,8 @@
 import { getSocket } from "./sockets";
 
 const canvas = document.getElementById("jsCanvas");
-const controls = document.getElementById("jsControls");
 const context = canvas.getContext("2d");
+const controls = document.getElementById("jsControls");
 const colors = document.getElementsByClassName("jsColor");
 const range = document.getElementById("jsRange");
 const mode = document.getElementById("jsMode");

@@ -13,12 +13,12 @@ html(lang="en")
         .gameContainer#jsGame
             .main
                 #jsNotifs
+                canvas.canvas#jsCanvas
                 .controls#jsControls
-                    canvas(id="jsCanvas" class="canvas" width="700px" height="700px")
-                    .controls__range
-                        input(type="range" id="jsRange" min="0.1" max="5" value="2.5" step="0.1")
+                    //- .controls__range
+                    //-     input(type="range" id="jsRange" min="0.1" max="5" value="2.5" step="0.1")
                     .controls__btns
-                        button(id="jsMode") Fill
+                        button#jsMode Fill
                     .controls__colors
                         .controls__color.jsColor(style="background-color: white")
                         .controls__color.jsColor(style="background-color: red")

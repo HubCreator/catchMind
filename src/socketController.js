@@ -12,6 +12,7 @@ const socketController = (socket, io) => {
   const superBroadcast = (event, data) => io.emit(event, data);
   const sendPlayerUpdate = () =>
     superBroadcast(events.playerUpdate, { sockets });
+
   const startGame = () => {
     //choose leader and random word , notify to everyone
     if (inProgress === false) {
@@ -20,11 +21,10 @@ const socketController = (socket, io) => {
       word = chooseWord();
       setTimeout(() => {
         superBroadcast(events.gameStarted);
-        io.to(painter.id).emit(events.leaderNotif, { word });
+        io.to(painter.id).emit(events.leaderNotif, { word }); // emit to specific socket
       }, 2000);
     }
   };
-
   const endGame = () => {
     inProgress = false;
   };
